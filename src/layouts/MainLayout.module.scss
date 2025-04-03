@@ -1,0 +1,143 @@
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  background: #3b3b3b;
+  color: white;
+  padding: 20px 6px;
+  width: 48px;
+}
+
+.sidebar > div > div > button {
+  border-radius: 8px;
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 20px;
+}
+
+.content {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.logo {
+  margin-bottom: 20px;
+}
+
+.active-button {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 80px);
+}
+
+.main > div > button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transition: 0.3s;
+}
+
+.bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 20px;
+}
+
+.sidebar-expanded {
+  box-shadow: 4px 0 16px 0 rgba(0, 0, 0, 0.08);
+  background: #fff;
+  padding: 20px 20px 24px 20px;
+  width: 250px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar-expanded > div > div > h1 {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 171%;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.sidebar-expanded > div > div > h2 {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 145%;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.sidebar-expanded-title {
+  padding-bottom: 20px;
+}
+
+.description {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 145%;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-expanded-buttons {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 20px;
+}
+
+.sidebar-expanded-button {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px 40px 10px 12px;
+  width: 210px;
+  height: 40px;
+  margin-bottom: 12px;
+
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 154%;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #3b3b3b;
+}
+
+.sidebar-expanded-button:hover {
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  color: #6d4aff;
+}
+
+.sidebar-expanded-button-first:hover {
+  background: #626262;
+  color: white;
+}
+
+.sidebar-expanded-button-active {
+  color: white;
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.12);
+  background: #3b3b3b;
+}
+
+.sidebar-expanded-text {
+  text-align: center;
+  width: 100%;
+}
+
+.content {
+  background: #f7f7f7;
+  padding: 40px 250px;
+}

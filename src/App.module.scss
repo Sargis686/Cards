@@ -1,0 +1,83 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.header-name {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 143%;
+  letter-spacing: 0.01em;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-title {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 171%;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-text {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 154%;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.back {
+  position: absolute;
+  left: -60px;
+
+  padding: 6px;
+  width: 32px;
+  height: 32px;
+}
+
+.back:hover {
+  background-color: white;
+  border-radius: 100%;
+  transition: 0.3s;
+}
+
+.back-active {
+  background: #ebe6ff;
+  border-radius: 100%;
+}
+
+.loading {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 171%;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.toast {
+  margin: 0;
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 171%;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.editLogo:hover,
+.deleteLogo:hover {
+  background: white;
+  border-radius: 100%;
+  transition: 0.3s;
+}

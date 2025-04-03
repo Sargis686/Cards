@@ -1,0 +1,55 @@
+.customSelectContainer {
+  position: relative;
+  width: 312px;
+}
+
+.customSelect {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  width: 100%;
+  height: 40px;
+  font-family: var(--font-family);
+  font-weight: 400;
+  background: #fff;
+  font-size: 14px;
+  line-height: 171%;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.8);
+
+  appearance: none;
+}
+
+.customSelect:hover {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.customSelect:focus {
+  border: 2px solid #35cdfd;
+}
+
+.arrow {
+  position: absolute;
+  top: calc(50% - 6px);
+  right: 12px;
+  pointer-events: none;
+  color: rgba(0, 0, 0, 0.8);
+  background: white;
+}
+
+.arrow-active {
+  transform: rotate(180deg);
+}
+
+.selectedValues {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 171%;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.arrow-active {
+  transform: rotate(180deg);
+}
