@@ -23,6 +23,8 @@ const CustomInput = forwardRef<HTMLInputElement,CustomInputProps>(
       placeholder={placeholder}
       {...rest}
     />
+fefererererer
+
     {error && <span className={s.errorText}>{error}</span>}
   </div>
   )
