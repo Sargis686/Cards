@@ -1,43 +1,46 @@
-import axiosInstance from "../axiosConfig";
+import api  from "../apiClientConfig";
 
 export const getCompanyById = async (id: string): Promise<Company | null> => {
   try {
-    const response = await axiosInstance.get(`/companies/${id}`);
+    const response = await api.get(`/companies/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Ошибка при получении информации об организации:", error);
+    console.error("Error getting company info:", error);
     return null;
   }
 };
 
-export const deleteCompany = async (companyId: string) => {
+export const deleteCompany = async (companyId: string): Promise<unknown> => {
   try {
-    const response = await axiosInstance.delete(`/companies/${companyId}`);
+    const response = await api.delete(`/companies/${companyId}`);
     if (response.status === 200) {
-      console.log("Компания успешно удалена");
+      console.log("Company successfully deleted");
       return response.data;
     }
+    return null;
   } catch (error) {
-    console.error("Ошибка при удалении компании:", error);
+    console.error("Error deleting company:", error);
     throw error;
   }
 };
 
+
+type CompanyUpdateData = {
+  name: string;
+  shortName: string;
+  businessEntity: string;
+  contract: {
+    no: string;
+    issue_date: string;
+  };
+  type: string[];
+};
 export const updateCompany = async (
   id: string,
-  updatedData: {
-    name: string;
-    shortName: string;
-    businessEntity: string;
-    contract: {
-      no: string;
-      issue_date: string;
-    };
-    type: string[];
-  }
+  updatedData:CompanyUpdateData
 ) => {
   try {
-    const response = await axiosInstance.patch(
+    const response = await api.patch(
       `/companies/${id}`,
       updatedData,
       {

@@ -2,16 +2,23 @@ import { useState } from "react";
 import styles from "./CustomSelect.module.scss";
 import selectArrowLogo from "../../assets/select-arrow.svg";
 
+interface Option {
+  value: number;
+  label: string;
+}
+
 interface CustomSelectProps {
   value: string;
   onChange: (value: string) => void;
-  options: { value: number; label: string }[];
+  options?: Option[];
+  label?:string
+  editable?:boolean
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
   value,
   onChange,
-  options,
+  options = [], // Default to empty array
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,34 +28,42 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 
   const handleOptionClick = (optionValue: string) => {
     onChange(optionValue);
-    console.log("optionValue", optionValue);
     setIsOpen(false);
   };
 
+  const selectedLabel =
+    options?.find((option) => option.value.toString() === value)?.label || "Select option";
+
   return (
     <div className={styles.customSelectContainer}>
-      <div className={styles.customSelect} onClick={handleToggle} tabIndex={0}>
-        <span>
-          {options.find((option) => option.value.toString() === value)?.label}
-          {value}
-        </span>
+      <div
+        className={styles.customSelect}
+        onClick={handleToggle}
+        tabIndex={0}
+      >
+        <span>{selectedLabel}</span>
         <span
           className={`${styles.arrow} ${isOpen ? styles["arrow-active"] : ""}`}
         >
-          <img src={selectArrowLogo} alt="selectArrowLogo" />
+          <img src={selectArrowLogo} alt="select arrow" />
         </span>
       </div>
+
       {isOpen && (
         <div className={styles.optionsContainer}>
-          {options.map((option) => (
-            <div
-              key={option.value}
-              className={styles.option}
-              onClick={() => handleOptionClick(option.label)}
-            >
-              {option.label}
-            </div>
-          ))}
+          {options.length === 0 ? (
+            <div className={styles.option}>No options available</div>
+          ) : (
+            options.map((option) => (
+              <div
+                key={option.value}
+                className={styles.option}
+                onClick={() => handleOptionClick(option.value.toString())}
+              >
+                {option.label}
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>

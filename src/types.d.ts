@@ -1,16 +1,17 @@
-interface Contract {
+interface CompanyContract  {
   no: string;
   issue_date: string;
 }
 
-interface Photo {
+  export interface CompanyPhoto  {
+  url: string | undefined;
   name: string;
   filepath: string;
   thumbpath: string;
   createdAt: string;
 }
 
-interface Company {
+interface Organization  {
   id: string;
   contactId: string;
   name: string;
@@ -24,7 +25,7 @@ interface Company {
   updatedAt: string;
 }
 
-interface Contact {
+interface OrganizationContact  {
   createdAt: string;
   email: string;
   firstname: string;
@@ -34,7 +35,7 @@ interface Contact {
   updatedAt: string;
 }
 
-interface Option {
+ interface DropdownOption  {
   name: string;
   id: number;
 }

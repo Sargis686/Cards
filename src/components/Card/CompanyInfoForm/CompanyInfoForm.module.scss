@@ -1,0 +1,71 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.editable-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.logo-edit {
+  width: 1rem;
+  height: 1rem;
+}
+
+.line-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.property {
+  width: 200px;
+  font-weight: 500;
+}
+
+.property-date-edit {
+  margin-left: 1rem;
+  font-weight: 500;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.separator {
+  margin: 0 0.5rem;
+}

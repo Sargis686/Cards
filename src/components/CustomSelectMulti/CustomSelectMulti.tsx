@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -8,27 +7,26 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 
 import ArrowDropDownIcon from "../../assets/select-arrow.svg?react";
-import CustomCheckboxImage from "../../assets/custom-checkbox.svg";
+import CustomCheckboxImage from "../../assets/customCheckbox.svg";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+// Option type definition
+interface Option {
+  name: string;
+  id: number;
+}
 
+// Custom arrow icon
 const CustomArrow = styled(({ className }: { className: string }) => (
-  <div
-    className={className}
-    style={{ background: "white", top: "15px", right: "10px", height: "18px" }}
-  >
+  <div className={className}>
     <ArrowDropDownIcon />
   </div>
 ))(() => ({
+  position: "absolute",
+  top: "15px",
+  right: "10px",
+  width: "18px",
+  height: "18px",
+  background: "white",
   transform: "rotate(0deg)",
   transition: "transform 0.2s ease-in-out",
   "&.MuiSelect-iconOpen": {
@@ -36,17 +34,12 @@ const CustomArrow = styled(({ className }: { className: string }) => (
   },
 }));
 
-interface MultipleSelectCheckmarksProps {
-  options: Option[];
-  onChange: (values: string[]) => void;
-  defaultValue: string;
-}
-
+// Custom checkbox
 const CustomCheckbox = ({ checked }: { checked: boolean }) => (
   <div
     style={{
       border: "1px solid rgba(0, 0, 0, 0.3)",
-      borderRadius: " 4px",
+      borderRadius: "4px",
       width: "20px",
       height: "20px",
     }}
@@ -64,59 +57,80 @@ const CustomCheckbox = ({ checked }: { checked: boolean }) => (
   </div>
 );
 
+// Dropdown height styling
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+interface MultipleSelectCheckmarksProps {
+  options: Option[];
+  onChange: (values: string[]) => void;
+  defaultValue: string;
+  label?:string;
+  editable?:boolean
+  value: string[];                     // <-- required  
+}
+
 export default function MultipleSelectCheckmarks({
   options,
   onChange,
   defaultValue,
-}: MultipleSelectCheckmarksProps) {
-  const [companyType, setCompanyType] = React.useState<string[]>([
-    defaultValue,
-  ]);
 
-  const handleChange = (event: SelectChangeEvent<typeof companyType>) => {
+}: MultipleSelectCheckmarksProps) {
+  const [selectedValues, setSelectedValues] = React.useState<string[]>(
+    defaultValue ? [defaultValue] : []
+  );
+
+  const handleChange = (event: SelectChangeEvent<typeof selectedValues>) => {
     const {
       target: { value },
     } = event;
 
-    onChange(value as string[]);
-    setCompanyType(typeof value === "string" ? value.split(",") : value);
+    const newValue = typeof value === "string" ? value.split(",") : value;
+    setSelectedValues(newValue);
+    onChange(newValue);
   };
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={companyType}
-          onChange={handleChange}
-          input={
-            <OutlinedInput
-              sx={{
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#35cdfd;",
-                },
-                "&.Mui-error .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#35cdfd;",
-                },
-              }}
-            />
-          }
-          renderValue={(selected) => selected.join(", ")}
-          MenuProps={MenuProps}
-          IconComponent={CustomArrow}
-        >
-          {options
-            .map((item) => item.name)
-            .map((name) => (
-              <MenuItem key={name} value={name}>
-                <CustomCheckbox checked={companyType.includes(name)} />
-                <ListItemText primary={name} />
-              </MenuItem>
-            ))}
-        </Select>
-      </FormControl>
-    </div>
+    <FormControl sx={{ m: 1, width: 300 }}>
+      <Select
+        multiple
+        value={selectedValues}
+        onChange={handleChange}
+        input={
+          <OutlinedInput
+            sx={{
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#35cdfd",
+              },
+              "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#35cdfd",
+              },
+            }}
+          />
+        }
+        renderValue={(selected) => selected.join(", ")}
+        MenuProps={MenuProps}
+        IconComponent={CustomArrow}
+      >
+        {options.length === 0 ? (
+          <MenuItem disabled>No options available</MenuItem>
+        ) : (
+          options.map((item) => (
+            <MenuItem key={item.name} value={item.name}>
+              <CustomCheckbox checked={selectedValues.includes(item.name)} />
+              <ListItemText primary={item.name} />
+            </MenuItem>
+          ))
+        )}
+      </Select>
+    </FormControl>
   );
 }

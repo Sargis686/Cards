@@ -23,13 +23,9 @@ const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.currentTarget === e.target) {
+    if (e.target === e.currentTarget) {
       onClose();
     }
-  };
-
-  const closeModal = () => {
-    onClose();
   };
 
   return (
@@ -38,10 +34,14 @@ const Modal: React.FC<ModalProps> = ({
         {title && <h2 className={styles.title}>{title}</h2>}
         <div className={styles.body}>{children}</div>
         <div className={styles.buttons}>
-          <button className={styles.back} onClick={closeModal}>
+          <button className={styles.back} onClick={onClose}>
             {backText}
           </button>
-          <button className={styles.next} onClick={nextModal}>
+          <button
+            className={styles.next}
+            onClick={nextModal}
+            disabled={!nextModal}
+          >
             {nextText}
           </button>
         </div>

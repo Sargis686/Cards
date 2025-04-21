@@ -1,0 +1,165 @@
+
+interface Company {
+    id: string;
+    contactId: string;
+    name: string;
+    shortName: string;
+    businessEntity: string;
+    contract: Contract;
+    type: string[];
+    status: string;
+                              photos: Photo[];
+    createdAt: string;
+    updatedAt: string;
+  }
+
+
+const [localCompany, setLocalCompany] = useState<Company | null>(company);
+    const [photos, setPhotos] = useState<Photo[]>([]);
+
+  
+  {type === "photos" && (
+          <>
+            {localCompany && localCompany.photos && photos && (
+              <div className={styles.line}>
+                <div className={`${styles.value} ${styles.photos}`}>
+                  {photos.map((photo, index) => (
+                    <div className={styles["photo-container"]} key={index}>
+                      <img
+                        key={photo.name}
+                        src={photo.thumbpath}
+                        alt={photo.name}
+                        className={styles.photo}
+                      />
+
+                      <button
+                        className={styles["photo-button"]}
+                        onClick={() => deleteImageHandler(photo.name)}
+                      >
+                        <img src={trashLogo} alt="trashLogo" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+
+
+
+
+      -----------------------------------------------------
+
+
+
+      
+
+import React from "react";
+
+import styles from "./Card.module.scss"; // Style it your way
+ // 
+import CompanyInfoForm from "./CompanyInfoForm";
+import PhotoManager from "./PhotoManager";
+import  {Photo} from "../../types";
+import ContactInfoForm from "./ContactInfoForm";
+
+interface Props {
+  // Company Info
+  inputValueAgreement: string;
+  inputValueAgreementDate: string;
+  selectedValueBusinessEntity: string;
+  selectedValueCompanyType: string[];
+
+  // Contact Info
+  inputValueResponsiblePerson: string;
+  inputValuePhoneNumber: string;
+  inputValueEmail: string;
+
+  // Editable
+  editableMode: boolean;
+
+  // Handlers
+  onChangeAgreement: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeAgreementDate: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeBusinessEntity: (value: string) => void;
+  onChangeCompanyType: (value: string[]) => void;
+
+  onChangeResponsiblePerson: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangePhoneNumber: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeEmail: (e: React.ChangeEvent<HTMLInputElement>) => void;
+
+  // Photo
+  photos: Photo[];
+  onUpload: (file: File) => void;
+  onDelete: (imageName: string) => void;
+}
+
+const Card: React.FC<Props> = ({
+  inputValueAgreement,
+  inputValueAgreementDate,
+  selectedValueBusinessEntity,
+  selectedValueCompanyType,
+
+  inputValueResponsiblePerson,
+  inputValuePhoneNumber,
+  inputValueEmail,
+
+  editableMode,
+
+  onChangeAgreement,
+  onChangeAgreementDate,
+  onChangeBusinessEntity,
+  onChangeCompanyType,
+
+  onChangeResponsiblePerson,
+  onChangePhoneNumber,
+  onChangeEmail,
+
+  photos,
+  onUpload,
+  onDelete,
+}) => {
+  return (
+    <div className={styles.cardWrapper}>
+      <h2 className={styles.title}>Информация о компании</h2>
+      <CompanyInfoForm
+        inputValueAgreement={inputValueAgreement}
+        inputValueAgreementDate={inputValueAgreementDate}
+        selectedValueBusinessEntity={selectedValueBusinessEntity}
+        selectedValueCompanyType={selectedValueCompanyType}
+        editableMode={editableMode}
+        onChangeAgreement={onChangeAgreement}
+        onChangeAgreementDate={onChangeAgreementDate}
+        onChangeBusinessEntity={onChangeBusinessEntity}
+        onChangeCompanyType={onChangeCompanyType}
+      />
+
+      <h2 className={styles.title}>Контактная информция</h2>
+
+      <ContactInfoForm
+        inputValueResponsiblePerson={inputValueResponsiblePerson}
+        inputValuePhoneNumber={inputValuePhoneNumber}
+        inputValueEmail={inputValueEmail}
+        editableMode={editableMode}
+        onChangeResponsiblePerson={onChangeResponsiblePerson}
+        onChangePhoneNumber={onChangePhoneNumber}
+        onChangeEmail={onChangeEmail}
+      /> 
+  
+
+      <h2 className={styles.title}>Фотографии</h2>
+      
+      
+      <PhotoManager
+        photos={photos}
+        onUpload={onUpload}
+        onDelete={onDelete}
+      />
+    </div>
+  );
+};
+
+export default Card;

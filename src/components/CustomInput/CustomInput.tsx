@@ -1,28 +1,31 @@
-import React from "react";
-import styles from "./CustomInput.module.scss";
+import React, { forwardRef } from "react";
+import s from "./CustomInput.module.scss";
 
 interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
+  error?: string;
+  editable?: boolean;
 }
 
-const CustomInput: React.FC<CustomInputProps> = ({
-  value,
-  onChange,
-  placeholder,
-  ...rest
-}) => {
+const CustomInput = forwardRef<HTMLInputElement,CustomInputProps>(
+  ({ label, value, onChange, placeholder, error, ...rest }, ref)=> {
   return (
+    <div className={s.inputWrapper}>
+    {label && <label className={s.label}>{label}</label>}
     <input
+      ref={ref}
       type="text"
-      className={styles.customInput}
+      className={`${s.inputField} ${error ? s.inputError : ""}`}
       value={value}
       onChange={onChange}
       placeholder={placeholder}
       {...rest}
     />
-  );
-};
-
+    {error && <span className={s.errorText}>{error}</span>}
+  </div>
+  )
+}
+)
 export default CustomInput;

@@ -1,91 +1,69 @@
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import MainLayout from "./layouts/MainLayout";
+
+import MainLayout from "./containers/AppLayout";
 import styles from "./App.module.scss";
 
 import editLogo from "./assets/edit.png";
 import deleteLogo from "./assets/delete.png";
+import BackArrow from "./assets/backArrow.svg?react";
+
 import Card from "./components/Card/Card";
 import Modal from "./components/Modal/Modal";
 import CustomInput from "./components/CustomInput/CustomInput";
 
-import BackArrowLogo from "./assets/back-arrow.svg?react";
-import useAuth from "./hooks/useAuth";
-import { deleteCompany, getCompanyById } from "./api/services/companyService";
-import { getContactById } from "./api/services/contactService";
+import useAuth from "./hook/useAuth";
+import { deleteCompany, getCompanyById } from "./api/AuthenticationService/organizationService ";
+import { getContactById } from "./api/AuthenticationService/userContactService ";
+
+import { Organization , OrganizationContact } from "./types";
 
 const companyId = "12";
+const contactId = "16";
 
-function App() {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isModalOpenDelete, setModalOpenDelete] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+const CompanyApp = () => {
+  const [company, setCompany] = useState<Organization | null>(null);
+  const [contact, setContact] = useState<OrganizationContact | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const [backButton, setBackButton] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [title, setTitle] = useState("Eternal Rest Funeral Home");
+  const [input, setInput] = useState("");
+  const [showBack, setShowBack] = useState(false);
 
-  const [title, setTitle] = useState<string>("Eternal Rest Funeral Home");
-
-  const toggleModal = () => {
-    setModalOpen(!isModalOpen);
-  };
-
-  const toggleModalDelete = () => {
-    setModalOpenDelete(!isModalOpenDelete);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  const deleteCompanyHandler = () => {
-    deleteCompany(companyId)
-      .then((data) => {
-        console.log("Данные ответа:", data);
-        toast.success("Успешно удалено");
-        setModalOpenDelete(false);
-      })
-      .catch((error) => {
-        console.error("Не удалось удалить компанию:", error);
-      });
-  };
-
-  const username = "USERNAME";
-  useAuth(username);
-
-  const [company, setCompany] = useState<Company | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  useAuth("USERNAME");
 
   useEffect(() => {
-    const fetchCompany = async () => {
+    (async () => {
       const companyData = await getCompanyById(companyId);
       setCompany(companyData);
+      const contactData = await getContactById(contactId);
+      setContact(contactData);
       setLoading(false);
-    };
-
-    fetchCompany();
-  }, [companyId]);
-
-  const [contact, setContact] = useState<Contact | null>(null);
-
-  useEffect(() => {
-    const contactId = "16";
-    const fetchContact = async () => {
-      try {
-        const data = await getContactById(contactId);
-        setContact(data);
-      } catch (err) {
-        console.error("Ошибка получения контактов", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchContact();
+    })();
   }, []);
 
-  const nextModalHandler = () => {
-    setTitle(inputValue);
-    setModalOpen(false);
+  const toggle = {
+    modal: () => setModal((p) => !p),
+    deleteModal: () => setDeleteModal((p) => !p),
+    backBtn: () => setShowBack((p) => !p),
+  };
+
+  const handle = {
+    inputChange: (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value),
+    saveTitle: () => {
+      setTitle(input);
+      setModal(false);
+    },
+    deleteCompany: () => {
+      deleteCompany(companyId)
+        .then(() => {
+          toast.success("Успешно удалено");
+          setDeleteModal(false);
+        })
+        .catch((err) => console.error("Удаление не удалось", err));
+    },
   };
 
   return (
@@ -93,75 +71,68 @@ function App() {
       <MainLayout>
         <header className={styles.container}>
           <button
-            className={`${styles.back} ${
-              backButton ? styles["back-active"] : null
-            }`}
-            onClick={() => setBackButton((prev) => !prev)}
+            className={`${styles.back} ${showBack ? styles["back-active"] : ""}`}
+            onClick={toggle.backBtn}
           >
-            <BackArrowLogo />
+            <BackArrow />
           </button>
+
           <h1 className={styles["header-name"]}>{title}</h1>
+
           <div>
-            <button className={styles.editLogo} onClick={toggleModal}>
-              <img src={editLogo} alt="editLogo" />
+            <button className={styles.editLogo} onClick={toggle.modal}>
+              <img src={editLogo} alt="edit" />
             </button>
-            <button className={styles.deleteLogo} onClick={toggleModalDelete}>
-              <img src={deleteLogo} alt="deleteLogo" />
+            <button className={styles.deleteLogo} onClick={toggle.deleteModal}>
+              <img src={deleteLogo} alt="delete" />
             </button>
           </div>
         </header>
 
         <Modal
-          isOpen={isModalOpen}
-          onClose={toggleModal}
+          isOpen={modal}
+          onClose={toggle.modal}
           title="Specify the Organization's name"
-          backText={"Cancel"}
-          nextText={"Save changes"}
-          nextModal={nextModalHandler}
+          backText="Cancel"
+          nextText="Save changes"
+          nextModal={handle.saveTitle}
         >
           <div className={styles.modal}>
             <CustomInput
-              value={inputValue}
-              onChange={handleChange}
+              value={input}
+              onChange={handle.inputChange}
               placeholder={title}
             />
           </div>
         </Modal>
 
         <Modal
-          isOpen={isModalOpenDelete}
-          onClose={toggleModalDelete}
+          isOpen={deleteModal}
+          onClose={toggle.deleteModal}
           title="Remove the Organization?"
-          backText={"No"}
-          nextText={"Yes, remove"}
-          nextModal={deleteCompanyHandler}
+          backText="No"
+          nextText="Yes, remove"
+          nextModal={handle.deleteCompany}
         >
           <p className={styles["modal-text"]}>
             Are you sure you want to remove this Organization?
           </p>
         </Modal>
 
-        {loading && <div className={styles.loading}>Загрузка...</div>}
-
-        {!loading && <Card company={company} title={"Company Details"} />}
-        {!loading && (
-          <Card
-            type="contact"
-            company={company}
-            title={"Contacts"}
-            contact={contact}
-          />
+        {loading ? (
+          <div className={styles.loading}>Загрузка...</div>
+        ) : (
+          <>
+            <Card company={company} title="Company Details" />
+            <Card type="contact" company={company} contact={contact} title="Contacts" />
+            <Card type="photos" company={company} title="Photos" />
+          </>
         )}
-        {!loading && <Card type="photos" company={company} title={"Photos"} />}
       </MainLayout>
 
-      <Toaster
-        containerClassName={styles.toast}
-        position="top-right"
-        reverseOrder={false}
-      />
+      <Toaster containerClassName={styles.toast} position="top-right" />
     </>
   );
-}
+};
 
-export default App;
+export default CompanyApp;
